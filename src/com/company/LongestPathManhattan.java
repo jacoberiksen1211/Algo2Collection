@@ -3,12 +3,12 @@ package com.company;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ShortestPathManhattan {
+public class LongestPathManhattan {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         n = Integer.parseInt(scanner.nextLine());
         array = new Node[n][n];
-
+        //create nodes
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 array[i][j] = new Node();
@@ -21,46 +21,44 @@ public class ShortestPathManhattan {
             }
         }
 
-        //setup left
+        //setup down
         for (int i = 0; i < n-1; i++) {
             for (int j = 0; j < n; j++) {
                 array[i][j].down = scanner.nextInt();
             }
         }
-        int weight = 0;
-        int i = 0;
-        int j = 0;
-        weight = longestPath(0, 0);
-        System.out.println(weight);
-
-        /*while(i < n-1 || j < n-1){
-            if(j == n-1){
-                // if on right edge
-                i++;
-                weight += current.down;
-
-            }
-            else if(i == n-1){
-                //if on bottom edge
-                j++;
-                weight += current.right;
-            }
-            else{
-                if(current.right < current.down){
-                    i++;
-                    weight += current.down;
-                }
-                else{
-                    j++;
-                    weight += current.right;
-                }
-            }*/
-            //current = array[i][j];
+        //run algorithm
+        longestPath2();
+        //System.out.println(longestPath(0, 0));
     }
 
     public static Node[][] array;
     public static ArrayList<Node> pQueue = new ArrayList<>();
     public static int n;
+
+    public  static void longestPath2(){
+        //faster than recursive method! pass 20
+        int[][] w = new int[n][n];
+        w[0][0] = 0;
+        for (int i = 1; i < n; i++) {
+            w[0][i] = array[0][i-1].right + w[0][i-1];
+        }
+        for (int i = 1; i < n; i++) {
+            w[i][0] = array[i-1][0].down + w[i-1][0];
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < n; j++) {
+                if(w[i][j-1] + array[i][j-1].right > w[i-1][j] + array[i-1][j].down){
+                    w[i][j] = w[i][j-1] + array[i][j-1].right;
+                }
+                else{
+                    w[i][j] = w[i-1][j] + array[i-1][j].down;
+                }
+            }
+        }
+        System.out.println(w[n-1][n-1]);
+    }
+
     public static int longestPath(int i, int j) {
         Node current = array[i][j];
         if(i == n-1 && j == n-1) {
