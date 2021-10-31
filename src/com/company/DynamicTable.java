@@ -3,7 +3,7 @@ package com.company;
 import java.util.Scanner;
 
 public class DynamicTable {
-    public sta
+
     public static void main(String[] args) {
         int[] array = new int[1];
         Scanner scanner = new Scanner(System.in);
